@@ -4,6 +4,7 @@
 accept string of a simple arithmatic statement between two values.
 
 Skills desplayed:
+use of functions 
 use of objects/class
 use of member functions
 remove whitespaces from a string
