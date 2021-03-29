@@ -8,7 +8,6 @@ eight_deck = []    #eight deck of cards for the house
 
 users_hand = [0,0]    #array will hold all user dealt cards 
 houses_hand = [0,0]   #will hold the houses dealt cards 
-temp_hand = [0,0]
 
 i = 0  #iterator to create 8 deck of cards 
 #while loop creates and 8 deck of card
@@ -24,12 +23,17 @@ random.shuffle(eight_deck)
 card_counter = 0
 
 #keeps track of the numerical value of the users hand 
-user_hand_value = 0 
+user_hand_value = 0
+user_hand_multi = []
+multi_active = False 
+
 
 #houses hand value
 house_hand_value = 0
+house_hand_multi = []
+house_multi_active = False 
 
-    
+
 #def shuffle():
     
 def nextCardInDeck():  #keeps track of next card to be dealt from the houses 8 deck
@@ -38,6 +42,10 @@ def nextCardInDeck():  #keeps track of next card to be dealt from the houses 8 d
     
 def initialDeal():    #initiates the handout of cards from the dealer  
     global users_hand
+    global houses_hand
+    global multi_active
+    global house_multi_active
+    global house_hand_multi
     
     users_hand[0] = eight_deck[card_counter]
     nextCardInDeck()
@@ -50,6 +58,13 @@ def initialDeal():    #initiates the handout of cards from the dealer
 
     houses_hand[1] = eight_deck[card_counter]
 
+    if(users_hand[0] == 'A' or users_hand[1] == 'A'):
+        multi_active = True
+        
+    if(houses_hand[0] == 'A' or houses_hand[1] == 'A'):
+        house_multi_active = True
+        
+        
     '''
     code to show user his hand and the first card of the deals hand with the second card faced down
     '''
@@ -57,39 +72,130 @@ def initialDeal():    #initiates the handout of cards from the dealer
 
 def userDealOneCard():            #a user decision -hit
     global user_hand_value
+    global user_hand_multi
+    global multi_active 
+    
     nextCardInDeck()
+    
     hit = eight_deck[card_counter]
-    hitIndex = deck.index(hit)
-    if(user_hand_value != 0):
-        user_hand_value = user_hand_value + int(card_value[hitIndex])
-    print('hit = ',hit)
-    print(user_hand_value)
+    
+    #print hit
+    print(hit)
 
-    users_hand.append(hit)  #adds hit to active users_hand 
-    print(users_hand)
+    if(multi_active == False):
+        if(hit == 'A'):
+
+            temp1 = 1 + user_hand_value
+            temp2 = 11 + user_hand_value
+
+            if(temp1 == 21 or temp2 == 21):
+                print('You got 21!')
+                return True     #returns True is user hand is active, False if the user bust
         
-def quickEvaluate():
-    if(user_hand_value > 21):
-        return True
+            elif(temp1 > 21 or temp2 > 21):
+                
+                mult_active = False
+                
+                if(temp1 < 21):
+                    user_hand_value = temp1
+                    print(user_hand_value)
+                    return True      
+                
+                if(temp2 < 21):
+                    user_hand_value = temp2
+                    print(user_hand_value)
+                    return True
+
+                return False
+            else:
+                multi_active = True
+                user_hand_value = temp2
+                user_hand_multi = [temp1,temp2]
+                print(user_hand_multi)
+                return True 
+            
+        else:
+            
+            hitIndex = deck.index(hit)
+            user_hand_value = user_hand_value + card_value[hitIndex]
+            print(user_hand_value)
+            if (user_hand_value > 21):
+                return False
+            else:
+                return True    
+
+    else: #if(multi_active == True)
+        if(hit == 'A'):
+            multi_active = True
+            user_hand_multi[0] = user_hand_multi[0] + 1
+            user_hand_multi[1] = user_hand_multi[1] + 1
+            user_hand_value = user_hand_multi[1]
+
+
+            if(user_hand_multi[1] > 21):
+                multi_active = False
+                user_hand_value = user_hand_multi[1] + 1
+            
+                
+        else:
+            hitIndex = deck.index(hit)
+            hit_value = card_value[hitIndex]
+                
+            temp1 = user_hand_multi[0]
+            temp2 = user_hand_multi[1]
+            
+            if(temp1 + hit_value == 21 or temp2 + hit_value == 21):
+                print('House just got 21!')
+                user_hand_value = 21
+                return True
+
+
+            if(temp2 + hit_value > 21):
+                user_multi_active = False 
+                user_hand_value = temp1 + hit_value
+                
+            elif(temp2 + hit_value < 21):
+                user_multi_active = True
+                user_hand_multi = [temp1 + hit_value ,temp2 + hit_value]
+                user_hand_value = temp2 + hit_value
+        
+
+    if(multi_active == True):
+        print(user_hand_multi)
     else:
+        print(user_hand_value, ' %')
+        
+
+    
+def quickEvaluate():
+    if(user_hand_value <= 21):
         return False
+    else:
+        return True
 
 
 def userDecision():
     userInput = int(input('Type 1 = Hit :  2 = Stay : 3 = Double : 4 = Surrender: ')) #decision prompt for the user 
-
+    
     #hit 
     if(userInput == 1):
         userDealOneCard()
         didBreak = quickEvaluate() #checks if user's hand is above 21 
         if(didBreak == True):
+            
             print('Over 21, try again!')
-            return False  #returns false if user busts and true if user wins 
+            return False  #returns false if user busts and true if user wins
+        
         else:
-            userDecision()
+            if(user_hand_value == 21):  #if user has 21 return True 
+                return True
+            else:
+                userDecision()
+                
     
     #stay
     elif(userInput == 2):
+        print('user chooses to stay')
         return True 
         #do nothing 
     
@@ -107,57 +213,186 @@ def userDecision():
     elif(userInput == 4):
         #forfiet hand and lose half of wager
         return False
+
+    return True
     
 def housesDecision():
     global house_hand_value
+    global house_multi_active 
+    global house_hand_multi 
 
-    while(house_hand_value < 17):
+    while(house_hand_value < 16):
         #keep hitting until over 16 or bust
         nextCardInDeck()
         hit = eight_deck[card_counter]
-        hitIndex = deck.index(hit)
-        house_hand_value = house_hand_value + int(card_value[hitIndex])
+        print("dealer's hit = ", hit)
 
-    if(house_hand_value > 21):
-        return False
-    else:
-        return True
-        
-        
+
+        if(house_multi_active == False):
+            if(hit == 'A'):
+                #code
+                
+                temp1 = 1 + house_hand_value
+                temp2 = 11 + house_hand_value
+
+                if(temp1 == 21 or temp2 == 21):
+                    
+                    house_multi_hand = False
+                    house_hand_value = 21 
+                    print('House got 21!')
+                    return True
+                
+                elif(temp2 > 21):
+                    
+                    house_mult_active = False 
+                    house_hand_value = temp1
+                    print(house_hand_value)
+                    
+                else:
+                
+                    house_multi_active = True
+                    house_hand_value = temp2
+                    house_hand_multi = [temp1,temp2]
+                    print(house_hand_multi)
+                
+            else:
+                hitIndex = deck.index(hit)
+                house_hand_value = house_hand_value + card_value[hitIndex]
+                print(house_hand_value)     
+
+        if(house_multi_active == True):
+            if(hit == 'A'):
+                house_multi_active = False
+                house_hand_value = house_hand_multi[1] + 1
+            #    print(house_hand_value)
+               
+            else:
+                hitIndex = deck.index(hit)
+                hit_value = card_value[hitIndex]
+                
+                temp1 = house_hand_multi[0]
+                temp2 = house_hand_multi[1]
+
+                if(temp1 + hit_value == 21 or temp2 + hit_value == 21):
+                    print('House just got 21!')
+                    house_hand_value = 21 
+                    return True
+
+                ####CONTINUE LOGIC ########
+
+                if(temp2 + hit_value > 21):
+                    house_multi_active = False 
+                    house_hand_value = temp1 + hit_value
+                elif(temp2 + hit_value < 21):
+                    house_multi_active = True
+                    house_hand_multi = [temp1 + hit_value ,temp2 + hit_value]
+                    house_hand_value = temp2 + hit_value
+
+        if(house_multi_active == False):
+            print(house_hand_value)
+        else:
+            print(house_hand_multi)
+                
+    return False   
 
 def houseCheckForBlackjack():
-    global house_hand_value 
+    global house_hand_value
+    global house_multi_active 
+    global house_hand_multi
+
     
-    house_card_one_index = deck.index(houses_hand[0]) #house card 1 
-    house_card_one = int(card_value[house_card_one_index])
+    card_one = houses_hand[0]   #user card one
+    card_two = houses_hand[1]   #user card two
+    card_one_index = deck.index(card_one)
+    card_two_index = deck.index(card_two)
 
-    house_card_two_index = deck.index(houses_hand[1]) #house card 2 
-    house_card_two = int(card_value[house_card_two_index])
+    #will return true if house obtains black jack, and false otherwise 
+    if(card_one == 'A' and card_two == 'A'):
+        house_multi_active = True
+        house_hand_multi = [2,12]
+        return False
 
-    house_hand_value = house_card_one + house_card_two  #sum of the houses initial deal 
-    if(house_hand_value == 21):
-        return True
+    if(card_one == 'A'):
+        if(card_two_index > 7):
+            house_hand_value = 21
+            print("House has blackjack3! You lose!")
+            return True
+        else:
+            return False
+        
+    if(card_two == 'A'):
+        if(card_one_index > 7):
+            house_hand_value = 21
+            print("House has blackjack4! You lose!")
+            return True
+        else:
+            return False
+
+    house_hand_value = card_value[card_one_index] + card_value[card_two_index]
+        
+def iniitialEvaluateHouse():
+    global houses_hand
+    global house_hand_multi
+    global house_hand_value
+    
+    if (houses_hand[0] == 'A' and houses_hand[1] == 'A'):
+        house_hand_multi = [2,12]
+        house_hand_value = 12
+        print (house_hand_multi)
+        return 0
+    
+    elif (houses_hand[0] == 'A'):
+        card_two = houses_hand[1]   #house card two
+        card_two_index = deck.index(card_two)
+
+        temp1 = 1 + card_value[card_two_index]
+        temp2 = 11 + card_value[card_two_index]
+
+        house_hand_multi = [temp1,temp2]
+        house_hand_value = temp2
+        print(house_hand_multi)
+        return 0
+    
+    elif (houses_hand[1] == 'A'):
+        card_one = houses_hand[0]      #house card one
+        card_one_index = deck.index(card_one)
+        
+        temp1 = 1 + card_value[card_one_index]
+        temp2 = 11 + card_value[card_one_index]
+
+        house_hand_multi = [temp1,temp2]
+        house_hand_value = temp2
+        print(house_hand_multi)
+        return 0
     else:
-        return False 
+        card_one = houses_hand[0]      #house card one
+        card_one_index = deck.index(card_one)
+        card_two = houses_hand[1]   #house card two
+        card_two_index = deck.index(card_two)
+
+        house_hand_value = card_value[card_one_index] + card_value[card_two_index]
+        print(house_hand_value)
+        
 
 def initialEvaluateUser():
     global user_hand_value
-    
-    bust = 22
-    win = 21
-    user_hand_value = 0
-    user_hand_multi = []
+    global user_hand_multi
+    global house_hand_value
+    global multi_active
 
-    card_one = users_hand[0]
+
+    card_one = users_hand[0]      #user card one
     card_one_index = deck.index(card_one)
-    card_two = users_hand[1]
+    card_two = users_hand[1]   #user card two
     card_two_index = deck.index(card_two)
 
 
     #if card 1 is an Ace and checks if card 2 is 
     if (card_one == 'A'):
+        multi_active = True
         if(card_two == 'A'):
             user_hand_multi = [2,12]
+            user_hand_value = 12
         else:
             if(card_value[card_two_index] > 9):  #checks if a card of value of 10 is paired with an Ace 
                 print('blackjack_1')
@@ -167,62 +402,103 @@ def initialEvaluateUser():
                 temp1 = 1 + card_value[card_two_index]   #values of an Ace can be either 1 or 11
                 temp2 = 11 + card_value[card_two_index]  
                 user_hand_multi = [temp1,temp2]
+                user_hand_value = temp2
+
     #if card one is not an Ace, checks is card 2 is 
     elif (card_two == 'A'):
-        if(card_value[card_one_index] > 9):
+        multi_active = True
+        if(card_value[card_one_index] > 9): #if card one is a 10 then user gets blackjack
             print('blackjack_2')
             user_hand_value = 21
-            return True         #returns true if blackjack is obtained. 
+            return True         #returns True if blackjack is obtained. 
         else:
-            temp1 = 1 + card_value[card_two_index]
-            temp2 = 11 + card_value[card_two_index]
+            temp1 = 1 + card_value[card_one_index]   #values of an Ace can be either 1 or 11
+            temp2 = 11 + card_value[card_one_index]
             user_hand_multi = [temp1,temp2]
+            user_hand_value = temp2
+            
     #If niether card is an Ace
     else:
         user_hand_value = card_value[card_one_index] + card_value[card_two_index]
 
     
-    if (user_hand_value == 0):
+    if (multi_active == True):
         print(user_hand_multi)
 
     else:
         print(user_hand_value)
+
+    iniitialEvaluateHouse()
 
     return False
         
 
 
 def driver():
-    print(eight_deck)
+    
+    game_over = False
+    
+    #print(eight_deck)
 
     initialDeal()
 
     print("house1 = " + houses_hand[0])
     print("house2 = " + houses_hand[1])
     print('users hand: ', users_hand )
+    print('houses hand: ', houses_hand )
 
 
-    if(houseCheckForBlackjack() == True):
+    if(houseCheckForBlackjack() == True):   #returns True if the house's intial dealt hand is a blackjack
         print('House Wins, House Blackjack')
 
     else:
         userHasBlackjack = initialEvaluateUser()
 
         if (userHasBlackjack == True ):
-            print('You won! 21!')
+            print('You won! 21! (blackjack)')
         else:
-            u_decision = userDecision()
-            if(u_decision == True):   #if userDecision is True (then hand is active) if False (the user bust)
-                h_decision = houseDecision()
-                if(h_decision == False):
-                    print('You win! Play again!')
-                else:
-                    print('You lose, try again')
+            user_decision = userDecision()
+            if(user_decision == True):   #if userDecision is True (then hand is active) if False (the user bust)
+                game_over = False
+                if(game_over == False):    #If the game is not over. This lines execution means that the user does not have 21 and a house decsion is needed
+
+                    h_decision = housesDecision()
+                    
+                    if(h_decision == True and user_decision == True ):  #True means house blackjack
+                        
+                        if(house_hand_value == user_hand_value):
+                            print('Push0')
+                        else:
+                            print('You lose! Try again! (dealer 21)')
+                        
+                    else:
+                        if(house_hand_value < 21 and house_hand_value > user_hand_value):
+                            print('You lose, try again (house > player)')
+                            game_over = True
+                        elif (house_hand_value == user_hand_value):
+                            print ('You Push')
+                            game_over = True
+                        else:
+                            print('You win! Play again! (win off decision)')
+                            game_over = True 
             
-            elif(u_decision == False):  #runs if user busts
+            else:  #executes if users hand busts
               print('You lose, Try again!')
 
+
     
+###################################
+driver()        #initiates driver method
+###################################
 
 
-driver()
+
+
+'''
+Notes:
+
+working on adding the ability to play multiple hands
+work on visual display
+
+
+'''
