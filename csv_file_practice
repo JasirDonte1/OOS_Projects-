@@ -1,0 +1,38 @@
+# importing csv module
+import csv
+
+# csv file name
+main_file_name = "/Users/JasirDonte/Desktop/flavors.csv"
+update_file_name = "/Users/JasirDonte/Documents/update_flavors.csv"
+
+
+# initializing the titles and rows list
+fields = []
+rows = []
+update_fields = []
+update_rows = []
+
+# reading csv file
+with open(main_file_name, 'r') as csvfile:
+	# creating a csv reader object
+	csvreader = csv.reader(csvfile)
+	
+	# extracting field names through first row
+	fields = next(csvreader)
+
+	# extracting each data row one by one
+	for row in csvreader:
+		rows.append(row)
+
+	# get total number of rows
+	print("Total no. of total rows in: ", main_file_name,"= %d"%(csvreader.line_num))
+
+# printing the field names from array
+print('Field names are:' + ', '.join(field for field in fields))
+
+# print first 5 rows
+print('\nFirst 5 rows are:\n')
+for row in rows[:5]:
+    print(row)
+
+
