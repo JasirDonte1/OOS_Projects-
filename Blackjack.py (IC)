@@ -1,3 +1,11 @@
+/*
+Basic black jack program i created to practice my python. I purposely did not design the program first to test myself on what I remebered. 
+I am currently working on a cleaner more complete version with less global scope. 
+
+Code is functional and compiles 
+/*
+
+
 import random 
 
 deck = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']  #single deck of cards 
