@@ -1,11 +1,10 @@
 '''
 
-today I started designing the skeleton and logic of how the program will work.
+finished isValidTerm() method
 
-next I need to start programming that logic 
 
 '''
-
+import re
 
 
 #derivative calculator
@@ -30,31 +29,35 @@ derivative_queue = []
 
 
 def isValidTerm(raw_num): #returns true if the passed string is a valid trig term
-    is_valid = True
-    #not_valid = ['++','--','//','**','^^', '+-', '-+', '+/', '/+','-/','/-','+*', '*+','+^','^+','']
     check_one = False
 
-    #if there is no (+,-,/,*,^) symbol return False
+    #if there is no (+,-,/,*,^) symbol in the string return False
 
-    for operation in operation_array:
-        if operation in raw_number:
+    for operation in operations_array:
+        if operation in raw_num:
             check_one = True 
-    
     #if back to back symbols are found return False
     
-
-    for char in raw_num:
-        print(char+1)
-        
-
-
-    return is_valid
     
+    if check_one == True:
+        previous_term = ''
+        #returns false if there are back to back characters that are operations
+        for char in raw_num:
+            if char in operations_array:
+                if previous_term in operations_array:
+                    return False
+            previous_term = char
+    else:
+        return False   #returns false if check_one does not pass the check
+
+    return True
+
     
-def enqueue (raw_num):    #raw num passes the string of user input 
+def enqueue (raw_num):    #raw num passes the string of user input and puts terms in a queue
+    queue = re.split('+|-|*|/', raw_num)
 
+    return queue
 
-    return 0
 
 def derivativeOf(term):   #function returns the derivative of a single term as a string
     derivative = 0
@@ -65,15 +68,14 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
 ###### FUNCTIONS DEFINED ABOVE ########
 
 try:
+    if(isValidTerm(raw_number)):
+        #print(enqueue(raw_number))
+        pass    #dummy statement 
     
-
-
-
-
-    
-
-
-   
+    else:
+        #raw number is not a valid number
+        print('Enter a valid Number')
+        
 
     
 except:
