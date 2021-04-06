@@ -1,6 +1,6 @@
 '''
 
-finished isValidTerm() method
+almost finished enqueue method to seperate terms 
 
 
 '''
@@ -8,7 +8,7 @@ import re
 
 
 #derivative calculator
-raw_number =  "2x^2+3x-4"
+raw_number =  "2x^2"
 operations_array = ['+','-','/','*','^']
 
 term_queue = []
@@ -27,18 +27,17 @@ derivative_queue = []
 
 #while a term exists in the derivative queue, pop and stringTo an operation to converted number
 
-
+#METHOD: ISVALIDTERM()
 def isValidTerm(raw_num): #returns true if the passed string is a valid trig term
     check_one = False
 
     #if there is no (+,-,/,*,^) symbol in the string return False
-
     for operation in operations_array:
         if operation in raw_num:
-            check_one = True 
+            check_one = True    #terms exist
+
+            
     #if back to back symbols are found return False
-    
-    
     if check_one == True:
         previous_term = ''
         #returns false if there are back to back characters that are operations
@@ -47,18 +46,24 @@ def isValidTerm(raw_num): #returns true if the passed string is a valid trig ter
                 if previous_term in operations_array:
                     return False
             previous_term = char
-    else:
+
+    else: #terms does not exist
+
+        #add logic for a single term 
+        
         return False   #returns false if check_one does not pass the check
 
     return True
 
-    
-def enqueue (raw_num):    #raw num passes the string of user input and puts terms in a queue
-    queue = re.split('+|-|*|/', raw_num)
 
+#METHOD: ENQUEUE  
+def enqueue (raw_num):    #raw num passes the string of user input and puts terms in a queue
+    queue = re.split(r"\+|\-|\*|\\", raw_num)
     return queue
 
 
+
+#METHOD: DERIVATIVE_OF
 def derivativeOf(term):   #function returns the derivative of a single term as a string
     derivative = 0
 
@@ -70,7 +75,8 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
 try:
     if(isValidTerm(raw_number)):
         #print(enqueue(raw_number))
-        pass    #dummy statement 
+        term_queue = enqueue(raw_number)
+       
     
     else:
         #raw number is not a valid number
