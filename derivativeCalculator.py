@@ -1,15 +1,15 @@
 '''
 
-almost finished enqueue method to seperate terms 
+finished enqueue method to seperate terms 
 
-
+add/work on brackets logic [] ()
 '''
 import re
 
 
 #derivative calculator
 raw_number =  "2x^2"
-operations_array = ['+','-','/','*','^']
+operations_array = ['+','-','/','*']
 
 term_queue = []
 operations_queue = []
@@ -31,7 +31,7 @@ derivative_queue = []
 def isValidTerm(raw_num): #returns true if the passed string is a valid trig term
     check_one = False
 
-    #if there is no (+,-,/,*,^) symbol in the string return False
+    #if there is no (+,-,/,*) symbol in the string return False
     for operation in operations_array:
         if operation in raw_num:
             check_one = True    #terms exist
@@ -48,11 +48,17 @@ def isValidTerm(raw_num): #returns true if the passed string is a valid trig ter
             previous_term = char
 
     else: #terms does not exist
+        #if valid single term
+        #for each character in the term
+        #if letter in alphabet or '^' ... continue
+        #else return false
 
-        #add logic for a single term 
-        
-        return False   #returns false if check_one does not pass the check
-
+        for char in raw_num:
+            if char.isalpha() or char == '^':
+                pass
+            else:
+                return False
+            
     return True
 
 
