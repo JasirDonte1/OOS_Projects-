@@ -78,13 +78,29 @@ def isValidTerm(raw_num): #returns true if the passed string is a valid trig ter
 
 
 #METHOD: ENQUEUE  
-def enqueue (raw_num):    #raw num passes the string of user input and puts terms in a queue
-
-    pass
-
-
+def enqueue(raw_num):
     
-    return 0
+    op_sub_array =[]
+    
+    for x in raw_num: 
+        if x in operations_array: 
+            op_sub_array.append(x)
+            
+    q = re.split(r"\+|\-|\*|\\", raw_num)
+
+    if q[0] == '':
+        q = q[1:]
+        q[0] = '-'+q[0]
+        
+        op_sub_array = op_sub_array[1:]
+
+    count = 1
+
+    for x in op_sub_array:
+        q[count] = op_sub_array[count-1]+q[count]
+        count += 1
+        
+    return q
 
 
 
@@ -168,13 +184,20 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
                     
         
     else:    #if not exponent is involved
+        print('ddd',term)
+        
         if(term == 'x'):
             derivative = '1'
         elif(term == '-x'):
             derivative = '-1'
+        elif(int(term)):
+            print('rrrr')
         else:
             expression = term.split('x')
             derivative = expression[0]
+
+
+        print('end of if statement')
         
     return derivative
 
@@ -201,14 +224,17 @@ def toString(expressions): #array
 ###### FUNCTIONS DEFINED ABOVE ########
 
 if(isValidTerm(raw_number)):     #if the entry/input is valid
-    #term_queue = enqueue(raw_number)
-    term_queue = ['-2x^-2','-3x','3']      #sample terms -2x^2-3x+3
+    term_queue = enqueue(raw_number)
+    print('term queue ', term_queue) #= ['-2x^-2','-3x','3']      #sample terms -2x^2-3x+3
 
     #TAKE THE DERIVATIVE OF EACH TERM#
     expression = []
-    for term in term_queue:
-        expression.append(derivativeOf(term))
-    print(expression)
+    
+    for t in term_queue:
+        expression.append(derivativeOf(t))
+
+        
+    print('exp:',expression)
 
     #METHOD TO STRING TOGETHER TERM_QUEUE#
 
