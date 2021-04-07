@@ -1,5 +1,6 @@
 '''
 I created a bug/situation where negative exponents are not being evaluated properly because of re.split() in enqueue() line examine 92
+negative exponents are being put in thier own term (container)
 
 add/work on brackets logic [ ] ( ) explore using bracket logic to solve negative exponent issue.
 
@@ -153,7 +154,6 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
             print('exp: ', expression)
             power = int(expression[1])
 
-          
 
             if (expression[0] == 'x'):  #-x
 
@@ -191,9 +191,7 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
                     derivative = derivative[1:]
                     
         
-    else:    #if not exponent is involved
-        print('ddd',term)
-            
+    else:    #if not exponent is involved            
         
         if(term == 'x'):
             derivative = '1'
@@ -228,11 +226,15 @@ def findDerivative(inp):
                 expression.append(u)
         print('expression: ',expression)
         #CODE TO STRING TOGETHER EXPRESSION[]#
-        to_string = ''
-        for r in expression:
-            to_string += r
-        print(to_string)
-            
+
+        if not expression:      #if the expression array is empty, return 0 for the derivative of a constant  
+            print('0')
+        else:
+            to_string = ''
+            for r in expression:
+                to_string += r
+            print(to_string)
+                
     else:
         #raw number is not a valid number
         print('Enter a valid Number')
