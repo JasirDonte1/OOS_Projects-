@@ -6,6 +6,8 @@ comment code in derivitevOf()
 
 fix the issue revolving arround queing up terms with negative coefficients - enqueue()
 
+derivative of a constant = 0
+
 '''
 
 
@@ -176,6 +178,26 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
         
     return derivative
 
+def toString(expressions): #array
+
+    w = ''
+    p = []
+
+    for x in expressions:
+        if x[0] == '-':
+            p.append(x)
+            pass
+        elif x[0].isnumeric():
+            temp = '+' + x
+            p.append(temp)
+    
+    for x in p:
+        w += x
+    if(w[0] == '+'):
+        w = w[1:]
+    return w
+
+
 ###### FUNCTIONS DEFINED ABOVE ########
 
 if(isValidTerm(raw_number)):     #if the entry/input is valid
@@ -186,7 +208,13 @@ if(isValidTerm(raw_number)):     #if the entry/input is valid
     expression = []
     for term in term_queue:
         expression.append(derivativeOf(term))
-    print(expression)    
+    print(expression)
+
+    #METHOD TO STRING TOGETHER TERM_QUEUE#
+
+    print(toString(expression))
+
+    
     
 else:
     #raw number is not a valid number
