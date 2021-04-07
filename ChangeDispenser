@@ -1,0 +1,45 @@
+
+# The function is expected to return an INTEGER_ARRAY.
+# The function accepts following parameters:
+#  1. FLOAT price
+#  2. FLOAT_ARRAY payment
+
+
+def ChangeDispenser(price, payment):
+    # Write your code here
+    pennies = 0
+    nickels = 0
+    dimes = 0
+    quarters = 0
+    pay_total = 0
+    
+    for coin in payment:
+        pay_total += coin 
+        
+    refund = pay_total - price 
+    
+    while (refund >= 0.25):
+        quarters += 1
+        refund -= 0.25
+        refund = round(refund,2)
+    while (refund >= 0.10):
+        dimes += 1
+        refund -= 0.10
+        refund = round(refund,2)
+    while (refund >= 0.05):
+        nickels += 1
+        refund -= 0.05
+        refund = round(refund,2)
+    while (refund >= 0.01):
+        pennies += 1
+        refund -= 0.01
+        refund = round(refund,2)
+                                
+    change = [pennies,nickels,dimes,quarters]
+   
+
+    return change
+
+        
+    
+    
