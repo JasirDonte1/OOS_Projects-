@@ -6,7 +6,7 @@ add/work on brackets logic [ ] ( ) explore using bracket logic to solve negative
 add more comments to code 
 
 
-program semi-functional. still can't properly evaluate negative exponents in polynomials or evaluate division/multiplication 
+program semi-functional. still can't properly evaluate negative exponents in terms or evaluate division/multiplication 
 
 
 today worked on driver, multiple executions, findDerivative()
@@ -22,13 +22,10 @@ import re
 
 
 #derivative calculator   d/dx
-#raw_number =  "-2x^2-3x-1"
 
 operations_array = ['+','-','/','*']
 term_queue = []
 operations_queue = []
-
-#actual derivative = 4x+4 = (4x+3+1)
 
 #evaluate if the term is a valid mathnatical term
 
@@ -116,12 +113,14 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
     coefficient = 0
     power = 0
 
-
+    if(term[0] == '+'):
+        term = term[1:]
+        
     if '^' in term: #if there is an exponent involved
         
         if(term[0] == 'x'):
             expression = term.split('^')
-            derivative = expression[1]
+            derivative = expression[1] + 'x'
         
         elif(term[0].isnumeric()):
             expression = term.split('^')
@@ -216,15 +215,18 @@ def findDerivative(inp):
     if(isValidTerm(inp)):     #if the entry/input is valid
         term_queue = enqueue(inp)
 
+        for m in term_queue:
+            print(type(m))
         #TAKE THE DERIVATIVE OF EACH TERM#
         expression = []
         for t in term_queue:
             u = derivativeOf(t)
+            print(u)
             if u == '0':
                 pass
             else:
                 expression.append(u)
-
+        print('expression: ',expression)
         #CODE TO STRING TOGETHER EXPRESSION[]#
         to_string = ''
         for r in expression:
@@ -240,7 +242,7 @@ def findDerivative(inp):
 ###### FUNCTIONS DEFINED ABOVE ########
 
 
-
+##### DRIVER #####
 end = False
 
 while end == False:
