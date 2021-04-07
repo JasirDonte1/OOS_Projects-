@@ -1,12 +1,19 @@
 '''
+I created a bug/situation where negative exponents are not being evaluated properly because of re.split() in enqueue() line examine 92
 
-add/work on brackets logic [ ] ( )
+add/work on brackets logic [ ] ( ) explore using bracket logic to solve negative exponent issue.
 
-comment code in derivitevOf()
+add more comments to code 
 
-fix the issue revolving arround queing up terms with negative coefficients - enqueue()
 
-derivative of a constant = 0
+program semi-functional. still can't properly evaluate negative exponents in polynomials or evaluate division/multiplication 
+
+
+today worked on driver, multiple executions, findDerivative()
+
+fixed issued to properly evaluete constants as 0.
+
+fixed the issue revolving arround queing up terms with negative coefficients - enqueue()
 
 '''
 
@@ -15,12 +22,11 @@ import re
 
 
 #derivative calculator   d/dx
-raw_number =  "-2x^2-3x-1"
-operations_array = ['+','-','/','*']
+#raw_number =  "-2x^2-3x-1"
 
+operations_array = ['+','-','/','*']
 term_queue = []
 operations_queue = []
-derivative_queue = []
 
 #actual derivative = 4x+4 = (4x+3+1)
 
@@ -79,7 +85,7 @@ def isValidTerm(raw_num): #returns true if the passed string is a valid trig ter
 
 #METHOD: ENQUEUE  
 def enqueue(raw_num):
-    
+    print('raw_num', raw_num)
     op_sub_array =[]
     
     for x in raw_num: 
@@ -99,7 +105,7 @@ def enqueue(raw_num):
     for x in op_sub_array:
         q[count] = op_sub_array[count-1]+q[count]
         count += 1
-        
+    print('queue', q)
     return q
 
 
@@ -141,8 +147,11 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
             exp = ['-']
             term = term[1:]  #x^7
 
+            print('term: ', term)
 
             expression = term.split('^')  #[x,7]
+            print('split', expression)
+            print('exp: ', expression)
             power = int(expression[1])
 
           
@@ -185,13 +194,14 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
         
     else:    #if not exponent is involved
         print('ddd',term)
+            
         
         if(term == 'x'):
             derivative = '1'
         elif(term == '-x'):
             derivative = '-1'
-        elif(int(term)):
-            print('rrrr')
+        elif 'x' not in term:
+            derivative = '0'
         else:
             expression = term.split('x')
             derivative = expression[0]
@@ -201,49 +211,46 @@ def derivativeOf(term):   #function returns the derivative of a single term as a
         
     return derivative
 
-def toString(expressions): #array
-
-    w = ''
-    p = []
-
-    for x in expressions:
-        if x[0] == '-':
-            p.append(x)
-            pass
-        elif x[0].isnumeric():
-            temp = '+' + x
-            p.append(temp)
+def findDerivative(inp):
     
-    for x in p:
-        w += x
-    if(w[0] == '+'):
-        w = w[1:]
-    return w
+    if(isValidTerm(inp)):     #if the entry/input is valid
+        term_queue = enqueue(inp)
+
+        #TAKE THE DERIVATIVE OF EACH TERM#
+        expression = []
+        for t in term_queue:
+            u = derivativeOf(t)
+            if u == '0':
+                pass
+            else:
+                expression.append(u)
+
+        #CODE TO STRING TOGETHER EXPRESSION[]#
+        to_string = ''
+        for r in expression:
+            to_string += r
+        print(to_string)
+            
+    else:
+        #raw number is not a valid number
+        print('Enter a valid Number')
+
 
 
 ###### FUNCTIONS DEFINED ABOVE ########
 
-if(isValidTerm(raw_number)):     #if the entry/input is valid
-    term_queue = enqueue(raw_number)
-    print('term queue ', term_queue) #= ['-2x^-2','-3x','3']      #sample terms -2x^2-3x+3
 
-    #TAKE THE DERIVATIVE OF EACH TERM#
-    expression = []
+
+end = False
+
+while end == False:
+    i = input('d/dx Calculator \nEnter an expression (or type "end" to end program): ')
+    if i == 'end':
+        end = True
+    else:
+        findDerivative(i)
+            
     
-    for t in term_queue:
-        expression.append(derivativeOf(t))
 
-        
-    print('exp:',expression)
-
-    #METHOD TO STRING TOGETHER TERM_QUEUE#
-
-    print(toString(expression))
-
-    
-    
-else:
-    #raw number is not a valid number
-    print('Enter a valid Number')
 
 
