@@ -3,7 +3,7 @@
 
 
 
-def solution(A):
+def SmallestPositiveInt(A):
     # write your code in Python 
     compare = 1
     
