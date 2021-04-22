@@ -1,0 +1,85 @@
+#this program accepts an array that represents coin flips using 1's and 0s ex. [0,0,1,1,0,1] 
+#the minimum amount of character changes required to make sure outcomes alternate. [0,1,0,1,0,1] : would return 2 
+#return the same amount of digits given
+
+#this functions uses two test and performs each of them twice on the given input forwards and backswards
+#the final values of these test are added to an array and the smallest of them is returned
+
+
+def StaggerCoinArray(A):
+    
+    #format 01 checks if every two coin sequences in array == [0,1] and returns the number of chnages needed to make sequences identical
+    def Format_01(A):
+        ctr = 0      #counter variable 
+        changes = 0   #keeps track of the number of character changes 
+        t = []      #temporary array
+
+        for x in A:  #traverse through each value in A
+            if ctr % 2 == 0: #if on an even index 
+                if x == 0:   #if it is the correct values in even indexes do nothing 
+                    t.append(x)
+                else:      #if wrong value in spot is found, record change and appened correct value 
+                    changes += 1
+                    t.append(0)
+            else:   #if on an odd index 
+                if x == 1:
+                    t.append(x)
+                else:
+                    changes += 1
+                    t.append(1)
+            ctr += 1
+        return changes
+
+    #format 10 checks if every two coin sequences in array == [1,0] and returns the number of chnages needed to make sequences identical
+    def Format_10(A):
+        ctr = 0
+        changes = 0
+        t = []
+        for x in A:  #traverse through each value in A
+            if ctr % 2 == 0: #if on an even index 
+                if x == 1:
+                    t.append(x)
+                else:
+                    changes += 1
+                    t.append(1)
+            else:   #if on an odd index 
+                if x == 0:
+                    t.append(x)
+                else:
+                    changes += 1
+                    t.append(0)
+            ctr += 1
+        return changes
+    
+
+
+    ########## main code below ###########
+    
+    final_values = []
+
+    #test are performed to find the least amount of coin flip changes are needed
+    #a total of 4 test are used to evaluate
+    #the smallest number returned from these 4 test will be returned by solution()
+    
+    t1 = Format_01(A)
+    final_values.append(t1)
+    t2 = Format_10(A)
+    final_values.append(t2)
+    
+    #flips array and runs new array through format 10 and format 01 
+    A.reverse()
+
+    t3 = Format_01(A)
+    final_values.append(t1)
+    t4 = Format_10(A)
+    final_values.append(t4)
+
+
+    return min(final_values)
+    
+    
+    '''
+    
+    sample input :: [0,1,0] , [0,0,0,0,1,0] , [1,1,1,0,1]
+    '''
+
