@@ -1,0 +1,140 @@
+#extract person data from a text file into individual Person objects
+#ability to edit Person objects
+#print person objects
+
+import csv 
+
+
+class Person:
+
+
+    def __init__(self, employeeID, prefix, first_name, middle_name, last_name, gender, email, father_name, mother_name, mother_maiden, dob, tob, age_years,
+                 weight_kg, join_date, join_quarter, join_half, join_month_no, join_month_name, short_month, join_day, join_dow, short_dow, age_in_company, salary,
+                 last_hike, ssn, phone, place_name, county, city, state, zipcode, region, username, password):
+        
+        self.employeeID = employeeID
+        self.prefix = prefix
+        self.first_name = first_name
+        self.middle_name = middle_name
+        self.last_name = last_name 
+        self.gender = gender
+        self.email = email
+        self.father_name = father_name 
+        self.mother_name = mother_name 
+        self.mother_maiden = mother_maiden 
+        self.dob = dob            #date of birth
+        self.tob = tob          #time of birth 
+        self.age_years = age_years   #age in years 
+        self.weight_kg = weight_kg
+        self.join_date = join_date
+        self.join_quarter = join_quarter 
+        self.join_half = join_half
+        self.join_month_no = join_month_no
+        self.join_month_name = join_month_name 
+        self.short_month = short_month
+        self.join_day = join_day
+        self.join_dow = join_dow
+        self.short_dow = short_dow 
+        self.age_in_company = age_in_company
+        self.salary = salary
+        self.last_hike = last_hike
+        self.ssn = ssn
+        self.phone = phone 
+        self.place_name = place_name 
+        self.county = county 
+        self.city = city 
+        self.state = state
+        self.zipcode = zipcode 
+        self.region = region 
+        self.username = username 
+        self.password = password
+        
+    def __gt__(self, other):
+        if(self.last_name>other.last_name):
+            return True
+        else:
+            return False
+        
+    def BasicDisplay(self):
+        print('Name: ', self.first_name, self.last_name, '\nEmployeeID: ', self.
+              employeeID)
+        print('Gender: ', self.gender)
+        print('DOB: ', self.dob)
+        print('Phone: ', self.phone, '   Email: ', self.email)
+
+    def DisplayAll(self):
+        pass
+
+    
+    def EditPerson(self):
+        pass
+
+
+        
+        
+
+#######functions#######
+def NamesInList(employee):
+    t = []
+    for x in employee:
+        full_name = x.first_name +' '+ x.last_name
+        t.append(full_name)
+    t.sort()    #sorts employee data by first name
+    return t
+
+
+def EmployeeIDList(employee):
+    employee.sort()    #sorts data by last name 
+    t = []
+    for x in employee:
+        i = x.employeeID + " : " + x.first_name + ' ' + x.last_name
+        t.append(i)
+    return t    
+
+
+def ListBasicEmployeeData(employee):
+    employee.sort()         #sorts employee data by last name 
+    for x in employee:
+        x.BasicDisplay()
+        print('\n')
+
+def loadCSV(filename):
+    global employee, fields
+
+    data = []
+
+        # reading csv file
+    with open(filename, 'r') as csvfile:
+        # creating a csv reader object
+        csvreader = csv.reader(csvfile)
+          
+        # extracting field names through first row
+        fields = next(csvreader)
+      
+        # extracting each data row one by one
+        for row in csvreader:
+            data.append(row)
+            
+            
+            new_employee = Person(data[0][0], data[0][1], data[0][2], data[0][3], data[0][4], data[0][5], data[0][6], data[0][7], data[0][8], data[0][8], data[0][10], data[0][11],
+                                        data[0][12], data[0][13], data[0][14], data[0][15], data[0][16], data[0][17], data[0][18], data[0][19], data[0][20], data[0][21], data[0][22],
+                                        data[0][23], data[0][24], data[0][25], data[0][26], data[0][27], data[0][28], data[0][29], data[0][30], data[0][31], data[0][32], data[0][33],
+                                        data[0][34],data[0][35])
+            
+            employee.append(new_employee)
+
+            data = [] #clears out row 0 
+    
+        
+###### main driver ########
+
+employee = []
+fields = []
+filename = "/Users/JasirDonte/Downloads/employee_data.csv"
+
+#load data from files into employee[]
+loadCSV(filename)
+
+for x in EmployeeIDList(employee):
+    print(x + '\n')
+
