@@ -1,4 +1,4 @@
-#START DATA 4/22/21
+#START DATE 4/22/21
 
 #extract person data from a text file into individual Person objects
 #ability to edit Person objects
@@ -51,12 +51,8 @@ class Person:
         self.username = username 
         self.password = password
 
-        self.weight_lbs = str(float(weight_kg) * 2.205)
+        self.weight_lbs = str(float(weight_kg) * 2.205) #convert weight kg to lbs 
 
-
-    ###### public members ######
-
-    ###### private members #####
 
     #operator overloading  >   
     def __gt__(self, other):
@@ -64,6 +60,7 @@ class Person:
             return True
         else:
             return False
+        
         
     def BasicDisplay(self):
         print('Name: ', self.first_name, self.last_name, '\nEmployeeID: ', self.
@@ -300,16 +297,24 @@ employee = []
 management = [] 
 fields = []
 filename = "/Users/JasirDonte/Downloads/employee_data.csv"
-#load data from files into employee[]
-LoadEmployeeCSV(filename)
+
+LoadEmployeeCSV(filename) #load data from files into employee[]
 
 #ListBasicEmployeeData(employee)
+
 
 '''
 employee_ID_List = EmployeeIDList(employee)
 for x in employee_ID_List:
     print(x)
 '''
-emp_no = 4
 
+
+'''
+emp_no = 4
 employee[emp_no].EditPerson()
+'''
+
+
+
+
