@@ -1,5 +1,4 @@
-#START DATE 4/22/21
-
+#START DATE 4/22/21 
 #extract person data from a text file into individual Person objects
 #ability to edit Person objects
 #print person objects
@@ -8,6 +7,8 @@ import csv
 
 
 class Person:
+
+    
 
 
     def __init__(self, employeeID, prefix, first_name, middle_initial, last_name, gender, email, father_name, mother_name, mother_maiden, dob, tob, age_years,
@@ -24,9 +25,9 @@ class Person:
         self.father_name = father_name 
         self.mother_name = mother_name 
         self.mother_maiden = mother_maiden 
-        self.dob = dob            #date of birth
-        self.tob = tob          #time of birth 
-        self.age_years = age_years   #age in years 
+        self.dob = dob                              #date of birth
+        self.tob = tob                              #time of birth 
+        self.age_years = age_years                  #age in years 
         self.weight_kg = weight_kg
         self.join_date = join_date
         self.join_quarter = join_quarter 
@@ -51,8 +52,8 @@ class Person:
         self.username = username 
         self.password = password
 
-        self.weight_lbs = str(float(weight_kg) * 2.205) #convert weight kg to lbs
-        self.full_name = first_name + ' ' + last_name
+        self.weight_lbs = str(float(weight_kg) * 2.205)         #convert weight kg to lbs
+        self.full_name = first_name + ' ' + last_name 
 
     menu_no = 0
 
@@ -81,7 +82,7 @@ class Person:
         print('__Employee ID Updated__')
 
     def ChangeName(self):
-        name = self.last_name + ', ' + self.first_name + ' ' + self.middle_initial
+        name = self.last_name + ', ' + self.first_name + ' ' + self.middle_initial #concatenates current name in Person Type 
         print('Current Name: ', name)
         updated_first_name = input('Enter first name: ')
         self.first_name = updated_first_name
@@ -101,7 +102,7 @@ class Person:
     def ChangeEmail(self):
         print('Current Employee Email: ', self.email)
         user_input = input('Enter new email: ')
-        if '@' in user_input:  #check is string contains @ symbol
+        if '@' in user_input:                       #check is string contains @ symbol
             if user_input.endswith('.com') or user_input.endswith('.org') or user_input.endswith('.net'): #check if string ends in a .com .org or .net
                 self.email = user_input
                 print('...email is valid \n__Email Updated__ (', self.email,')' )
@@ -113,22 +114,26 @@ class Person:
     def ChangeParentInfo(self):
         print('Fathers Name: ', self.father_name, '\nMothers Name', self.mother_name, '\nMothers Maiden Name: ', self.mother_maiden)
 
-        user_input1 = int(input('What field do you want to change? \n1. Fathers Name \n2. Mothers Name \n3. Mothers Maiden Name \n'))
-
-        if user_input1 == 1:  #Fathers name 
+        user_input1 = 0
+        try:
+            user_input1 = int(input('What field do you want to change? \n1. Fathers Name \n2. Mothers Name \n3. Mothers Maiden Name \n'))
+        except ValueError:
+            print('Please enter a number')
+            
+        if user_input1 == 1:                        #Fathers name 
             print('Current Name Listed: ', self.father_name)
             user_input2 = input('Enter new Fathers Name ')
             self.father_name = user_input2
             print('__Fathers Name Updated__ (', self.father_name,')')
             
-        elif user_input1 == 2: #Mothers Name
+        elif user_input1 == 2:                      #Mothers Name
             print('Current Name Listed: ', self.mother_name)
             user_input2 = input('Enter new Mothers Name ')
             self.mother_name = user_input2
             print('__Mothers Name Updated__ (', self.mother_name,')')
 
             
-        elif user_input1 == 3: #Mothers Maiden Name 
+        elif user_input1 == 3:                      #Mothers Maiden Name 
             print('Current Name Listed: ', self.mother_maiden)
             user_input2 = input('Enter new Mothers Maiden Name ')
             self.mother_maiden = user_input2
@@ -143,16 +148,16 @@ class Person:
         self.tob = input('Enter Employeee new TOB (hh:mm:ss): ')
         print('__DOB and TOB Updated__ (DOB:',self.dob,' TOB:', self.tob,')')
         
-    def ChangeAgeInYears(self): #adjust to update automatically and write back to file daily
+    def ChangeAgeInYears(self):                     #adjust to update automatically and write back to file daily
         print('Current Age (in years)', self.age_years)
         self.age_years = input('Enter new Age in Years: ')
         print('__Age (in years) Updated__(', self.age_years,')')
         
-    def ChangeWeight(self): 
+    def ChangeWeight(self):                         
         print('Current Weight ( kg: ',self.weight_kg, ' lbs:', self.weight_lbs,')')
         self.weight_kg = input('Enter in new weight (kg) ')
         self.weight_lbs = str(float(self.weight_kg) * 2.205)
-        print('__Weight Updated__ ( kg: ', self.weight_kg,'lbs: ', "{:.2f}".format(float(self.weight_lbs)),')')
+        print('__Weight Updated__ ( kg: ', self.weight_kg,'lbs: ', "{:.2f}".format(float(self.weight_lbs)),')') #prints weight in lbs up to two decimal places 
         
     def ChangeSalary(self):
         print('Current Salary: ', self.salary)
@@ -160,7 +165,7 @@ class Person:
         print('__Salary Updated__ (', self.salary, ')')
 
         
-    def ChangePhoneNumber(self): #adjust have user to be able to enter input without '-' and format it before finishing update 
+    def ChangePhoneNumber(self):                    #adjust have user to be able to enter input without '-' and format it before finishing update 
         print('Current Phone Number: ', self.phone)
         phone = input('Enter new phone number (########## or ###-###-####): ')
         phone.replace('-','')
@@ -176,7 +181,7 @@ class Person:
         print('__Username Updated__ (', self.username,')')
         
     
-    def ChangePassword(self): #update to check if password has been used before, and giver password parameters 
+    def ChangePassword(self):                       #update to check if password has been used before, and giver password parameters 
         self.password = input('Enter new password: ')
         print('__Password Updated__')
 
@@ -189,7 +194,7 @@ class Person:
         print('Weight (kg): ', self.weight_kg, '   Weight (lbs)', self.weight_lbs)
         print('Join Date: ', self.join_date)
         print('Salary: ', self.salary)
-        print('SSN: ', self.ssn)   #only shows the last 4 digits 
+        print('SSN: ', self.ssn)                    
         print('Location: ', self.city,',', self.state,)
         print('Username: ', self.username)
         print('Password: ', self.password)
@@ -199,7 +204,11 @@ class Person:
     def EditPerson(self):
         print ('Enter the number or name of the field to edit')
         DisplayEditMenu()
-        user_input = int(input())
+        user_input = 0
+        try:
+            user_input = int(input())
+        except ValueError:
+            print('Please enter a number')
 
         if user_input == 1:
             self.ChangeEmployeeID()
@@ -251,6 +260,7 @@ def DisplayEditMenu():
                  'Change Age (in years)', 'Change Weight', 'Change Salary', 'Change Phone Number', 'Change Address', 'Change Username', 'Change Password']
     ctr = 1
 
+    #print menu
     for x in edit_menu:
         string = str(ctr) + '. ' + x
         print(string)
@@ -262,12 +272,12 @@ def NamesInList(employee):
     for x in employee:
         full_name = x.first_name +' '+ x.last_name
         t.append(full_name)
-    t.sort()    #sorts employee data by first name
+    t.sort()                                        #sorts employee data by first name
     return t
 
 
 def EmployeeIDList(employee):
-    employee.sort()    #sorts data by last name 
+    employee.sort()                                 #sorts data by last name 
     t = []
     for x in employee:
         i = x.employeeID + " : " + x.first_name + ' ' + x.last_name
@@ -276,8 +286,9 @@ def EmployeeIDList(employee):
 
 
 def ListBasicEmployeeData(employee):
-    employee.sort()         #sorts employee data by last name 
-    for x in employee[:5]: #HARD PROGRAMMED TO SHOW ONLY FIRST 5 EMPLOYEES SORTED BY LAST NAME 
+    employee.sort()                                 #sorts employee data by last name
+    for x in employee[:5]:                          #HARD PROGRAMMED TO SHOW ONLY FIRST 5 EMPLOYEES SORTED BY LAST NAME
+        print(employee[0].full_name)
         x.BasicDisplay()
         print('\n')
     
@@ -307,45 +318,50 @@ def LoadEmployeeCSV(filename):
                                         data[0][34],data[0][35])
         
             
-            employee.append(new_employee) #appends each Person type to global variable employee[]
+            employee.append(new_employee)   #appends each Person type to global variable employee[]
 
-            data = [] #resets row 0 for next extraction
+            data = []                       #resets row 0 for next extraction
             
 def FindEmployee(employee):
     
-    employee_data = []
+    employee_data = []                      #used to hold employee(s) that shore last name with user input 
     found = False
     ctr = 1
 
 
-    user_input = input("Search Employee List \nEnter Employee's last name: ")
+    user_input = input("Search Employee List \nEnter Employee's last name: ")  #user input 
 
-    for x in employee:
-        if user_input == x.last_name:
-            employee_data.append(x)
+    for x in employee:                       #traverses through employee[] (Person type array)
+
+        #adjust to format both comparisons to remove whitespaces and make are chars lowercase
+        if user_input == x.last_name:       #checks if last name of Person Type matches user input
+            employee_data.append(x)         #if match is found, Person data is appeneded to employee_data[]
             
-    if len(employee_data) > 1:
-        
+    if len(employee_data) > 1:              #checks if multiple people with the same last name exists in employee[]
         for x in employee_data:
             string = str(ctr) + '. ' + x.full_name
-            x.menu_no = ctr
+            x.menu_no = ctr                 #assigns a temporary menu number to person type 
             print(string)
             ctr+=1
-            
-        user_input = int(input('\nSelect Employee: '))
+        try:
+            user_input = int(input('\nSelect Employee: '))
+        except ValueError:
+            print('Please enter a number ')
 
         for x in employee_data:
-            if user_input == x.menu_no:
+            if user_input == x.menu_no:     #compares user input to assigned menu number 
                 return x
             
         if found == False:
             print('Input not recognized (1)')
+            return False
         
-    elif len(employee_data) == 1:
+    elif len(employee_data) == 1:           #returns the first position in the array if only one person in the employee[] shares a last name with user input
         return employee_data[0]
 
     else:
         print('Input not recognized (2)')
+        return False
     
 def Menu(employee):
     global active
@@ -353,8 +369,8 @@ def Menu(employee):
     #menu name titles 
     menu = ['Show Basic List of Employees','Show Employee ID List', 'Show Employee Information', 'Edit Employee Data']
 
-    #menu number 
-    ctr = 1
+    
+    ctr = 1                                 #menu number counter
 
     #print menu
     for x in menu:
@@ -363,7 +379,12 @@ def Menu(employee):
         ctr+=1
     print('Enter -1 to exit program')
 
-    user_input = int(input('\nChoose action from menu above: '))
+    user_input = 0
+    try:
+        user_input = int(input('\nChoose action from menu above: ')) #error handling for input that is not a number 
+    except ValueError:
+        print('Please enter a number ')
+        
     print('\n')
 
     #menu options 
@@ -377,16 +398,22 @@ def Menu(employee):
             
     elif user_input == 3:
         employee_data = FindEmployee(employee)
-        employee_data.PrintEmployeeData()
+        if employee_data == False:
+            print('Employee Name Not Found In List')
+        else:
+            employee_data.PrintEmployeeData()
         
             
     elif user_input == 4:
         #edit employee data
         employee_data = FindEmployee(employee)
-        employee_data.EditPerson()
+        if employee_data == False:
+            print('Employee Name Not Found In List')
+        else:
+            employee_data.EditPerson()
         
     
-    elif user_input == -1:   # -1 to exit program 
+    elif user_input == -1:                           # -1 to exit program 
         active = False
         
     else:
@@ -399,10 +426,11 @@ def Menu(employee):
 
 employee = []
 fields = []
-filename = "/Users/JasirDonte/Downloads/employee_data.csv"
-LoadEmployeeCSV(filename) #load data from files into employee[]
+filename = "/Users/JasirDonte/Documents/100 Records.csv"
+LoadEmployeeCSV(filename)                           #load data from files into employee[]
 active = True
+print (employee[1].full_name)
 while active == True:
-    Menu(employee)
+    Menu(employee) 
 
 ############################
